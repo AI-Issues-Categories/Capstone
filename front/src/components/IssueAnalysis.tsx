@@ -11,6 +11,8 @@ import { Alert, AlertDescription } from './ui/alert';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { exampleAnalyses, getExampleById } from './api/exampleAnalyses';
 import type { AnalysisResult as APIAnalysisResult } from './api/analysisApi';
+import { ConflictDonutChart } from './ConflictDonutChart';
+import { KeywordWordCloud } from './KeywordWordCloud';
 
 interface AnalysisResult {
   isValid: boolean;
@@ -365,6 +367,38 @@ export function IssueAnalysis() {
               </CardContent>
             </Card>
           )}
+
+          {/* Visualization Section */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Card>
+              <CardHeader>
+                <h3 className="text-gray-900">여론 대립 구도</h3>
+              </CardHeader>
+              <CardContent>
+                <div className="h-[300px] flex items-center justify-center">
+                  <ConflictDonutChart 
+                    support={analysisResult.supportOpinions.length}
+                    oppose={analysisResult.opposeOpinions.length}
+                    neutral={analysisResult.neutralOpinions.length}
+                  />
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <h3 className="text-gray-900">핵심 키워드 시각화</h3>
+              </CardHeader>
+              <CardContent>
+                 <KeywordWordCloud 
+                    words={analysisResult.keywords.map((k, i) => ({ 
+                      text: k, 
+                      value: 100 - (i * 5) > 10 ? 100 - (i * 5) : 10 // Ensure minimum size
+                    }))} 
+                 />
+              </CardContent>
+            </Card>
+          </div>
 
           {/* Keywords */}
           <Card>
