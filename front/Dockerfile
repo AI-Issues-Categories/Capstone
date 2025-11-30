@@ -10,7 +10,7 @@ RUN npm run build
 # 2단계: Nginx 서버 설정
 FROM nginx:stable-alpine
 # 1단계에서 만든 'dist' 폴더를 Nginx의 웹 루트로 복사
-COPY --from=builder /app/dist /usr/share/nginx/html
+COPY --from=builder /app/build /usr/share/nginx/html
 # 아래 4단계에서 만들 Nginx 설정 파일을 컨테이너 안으로 복사
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
