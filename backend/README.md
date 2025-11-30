@@ -64,7 +64,7 @@ Two safe options:
 - Open a tunnel (Windows PowerShell):
 
 ```powershell
-ssh -i C:\path\to\your-key.pem -N -L 5432:cap01-db.cv0h7ohckwwx.ap-northeast-2.rds.amazonaws.com:5432 ec2-user@<EC2_PUBLIC_IP>
+ssh -i C:\path\to\your-key.pem -N -L 5432:cap2-4b.cv0h7ohckwwx.ap-northeast-2.rds.amazonaws.com:5432 ec2-user@<EC2_PUBLIC_IP>
 ```
 
 - Then set `.env`:
