@@ -351,7 +351,7 @@ export function IssueAnalysis() {
           {analysisResult.originalContent && (
             <Card className="border-purple-200 bg-gradient-to-r from-purple-50 to-pink-50">
               <CardHeader>
-                <h3 className="text-purple-900">분석된 내용</h3>
+                <h3 className="text-purple-900 font-extrabold text-xl">분석된 내용</h3>
               </CardHeader>
               <CardContent className="space-y-3">
                 {analysisResult.originalContent.title && (
@@ -372,7 +372,7 @@ export function IssueAnalysis() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card>
               <CardHeader>
-                <h3 className="text-gray-900">여론 대립 구도</h3>
+                <h3 className="text-gray-900 font-extrabold text-xl">여론 대립 구도</h3>
               </CardHeader>
               <CardContent>
                 <div className="h-[300px] flex items-center justify-center">
@@ -387,11 +387,11 @@ export function IssueAnalysis() {
 
             <Card>
               <CardHeader>
-                <h3 className="text-gray-900">핵심 키워드 시각화</h3>
+                <h3 className="text-gray-900 font-extrabold text-xl">핵심 키워드 시각화</h3>
               </CardHeader>
               <CardContent>
                  <KeywordWordCloud 
-                    words={analysisResult.keywords.map((k, i) => ({ 
+                    words={analysisResult.keywords.map((k, i) => ({  
                       text: k, 
                       value: 100 - (i * 5) > 10 ? 100 - (i * 5) : 10 // Ensure minimum size
                     }))} 
@@ -403,7 +403,7 @@ export function IssueAnalysis() {
           {/* Keywords */}
           <Card>
             <CardHeader>
-              <h3 className="text-gray-900">{t.extractedKeywords}</h3>
+              <h3 className="text-gray-900 font-extrabold text-xl">{t.extractedKeywords}</h3>
               <p className="text-sm text-gray-600">{t.extractedKeywordsDesc}</p>
             </CardHeader>
             <CardContent>
@@ -421,7 +421,7 @@ export function IssueAnalysis() {
           {analysisResult.supportOpinions.length > 0 && (
             <Card className="border-blue-200 bg-blue-50/30">
               <CardHeader>
-                <h3 className="text-blue-900">{t.supportOpinion}</h3>
+                <h3 className="text-blue-900 font-extrabold text-xl">{t.supportOpinion}</h3>
                 <p className="text-sm text-blue-700">
                   {t.foundOpinions.replace('{count}', analysisResult.supportOpinions.length.toString())}
                 </p>
@@ -440,7 +440,7 @@ export function IssueAnalysis() {
           {analysisResult.opposeOpinions.length > 0 && (
             <Card className="border-red-200 bg-red-50/30">
               <CardHeader>
-                <h3 className="text-red-900">{t.opposeOpinion}</h3>
+                <h3 className="text-red-900 font-extrabold text-xl">{t.opposeOpinion}</h3>
                 <p className="text-sm text-red-700">
                   {t.foundOpinions.replace('{count}', analysisResult.opposeOpinions.length.toString())}
                 </p>
@@ -459,7 +459,7 @@ export function IssueAnalysis() {
           {analysisResult.neutralOpinions.length > 0 && (
             <Card className="border-gray-200 bg-gray-50/30">
               <CardHeader>
-                <h3 className="text-gray-900">{t.neutralOpinion}</h3>
+                <h3 className="text-gray-900 font-extrabold text-xl">{t.neutralOpinion}</h3>
                 <p className="text-sm text-gray-700">
                   {t.foundOpinions.replace('{count}', analysisResult.neutralOpinions.length.toString())}
                 </p>
@@ -478,7 +478,7 @@ export function IssueAnalysis() {
           {analysisResult.alternativeOpinions.length > 0 && (
             <Card className="border-green-200 bg-green-50/30">
               <CardHeader>
-                <h3 className="text-green-900">{t.alternativeOpinion}</h3>
+                <h3 className="text-green-900 font-extrabold text-xl">{t.alternativeOpinion}</h3>
                 <p className="text-sm text-green-700">
                   {t.foundOpinions.replace('{count}', analysisResult.alternativeOpinions.length.toString())}
                 </p>
@@ -498,7 +498,7 @@ export function IssueAnalysis() {
             <CardHeader>
               <div className="flex items-center gap-2">
                 <TrendingUp className="w-5 h-5 text-purple-600" />
-                <h3 className="text-purple-900">{t.futurePrediction}</h3>
+                <h3 className="text-purple-900 font-extrabold text-xl">{t.futurePrediction}</h3>
               </div>
               <p className="text-sm text-purple-700">{t.futurePredictionDesc}</p>
             </CardHeader>

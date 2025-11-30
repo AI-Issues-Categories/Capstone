@@ -15,7 +15,7 @@ export function ConflictDonutChart({ support, oppose, neutral }: ConflictDonutCh
     labels: ['찬성 (Support)', '반대 (Oppose)', '중립 (Neutral)'],
     datasets: [
       {
-        label: '# of Opinions',
+        label: '의견 수',
         data: [support, oppose, neutral],
         backgroundColor: [
           'rgba(54, 162, 235, 0.6)', // Blue for Support
@@ -42,6 +42,17 @@ export function ConflictDonutChart({ support, oppose, neutral }: ConflictDonutCh
         display: true,
         text: '여론 대립 구도 (Conflict Ratio)',
       },
+      tooltip: {
+        callbacks: {
+          label: function(context: any) {
+            const label = context.label || '';
+            const value = context.raw || 0;
+            const total = context.chart._metasets[context.datasetIndex].total;
+            const percentage = Math.round((value / total) * 100) + '%';
+            return `${label}: ${value}명 (${percentage})`;
+          }
+        }
+      }
     },
   };
 

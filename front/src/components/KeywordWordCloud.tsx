@@ -9,7 +9,7 @@ const options = {
   rotations: 2,
   rotationAngles: [-90, 0] as [number, number],
   fontSizes: [20, 60] as [number, number],
-  enableTooltip: true,
+  enableTooltip: false,
   deterministic: true,
   fontFamily: 'impact',
   fontStyle: 'normal',
