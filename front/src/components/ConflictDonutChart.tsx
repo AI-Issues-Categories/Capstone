@@ -8,24 +8,27 @@ interface ConflictDonutChartProps {
   support: number;
   oppose: number;
   neutral: number;
+  alternative: number;
 }
 
-export function ConflictDonutChart({ support, oppose, neutral }: ConflictDonutChartProps) {
+export function ConflictDonutChart({ support, oppose, neutral, alternative }: ConflictDonutChartProps) {
   const data = {
-    labels: ['찬성 (Support)', '반대 (Oppose)', '중립 (Neutral)'],
+    labels: ['찬성 (Support)', '반대 (Oppose)', '중립 (Neutral)', '대안 (Alternative)'],
     datasets: [
       {
         label: '의견 수',
-        data: [support, oppose, neutral],
+        data: [support, oppose, neutral, alternative],
         backgroundColor: [
           'rgba(54, 162, 235, 0.6)', // Blue for Support
           'rgba(255, 99, 132, 0.6)', // Red for Oppose
           'rgba(201, 203, 207, 0.6)', // Grey for Neutral
+          'rgba(75, 192, 192, 0.6)', // Green for Alternative
         ],
         borderColor: [
           'rgba(54, 162, 235, 1)',
           'rgba(255, 99, 132, 1)',
           'rgba(201, 203, 207, 1)',
+          'rgba(75, 192, 192, 1)',
         ],
         borderWidth: 1,
       },

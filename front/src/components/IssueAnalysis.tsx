@@ -3,45 +3,35 @@ import { Button } from './ui/button';
 import { Card, CardContent, CardHeader } from './ui/card';
 import { Textarea } from './ui/textarea';
 import { Input } from './ui/input';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
+import { Tabs, TabsList, TabsTrigger } from './ui/tabs';
 import { Badge } from './ui/badge';
 import { Sparkles, Link2, FileText, Youtube, Newspaper, BookOpen, TrendingUp, AlertCircle, Lightbulb } from 'lucide-react';
 import { useLanguage } from './LanguageContext';
 import { Alert, AlertDescription } from './ui/alert';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import { exampleAnalyses, getExampleById } from './api/exampleAnalyses';
-import type { AnalysisResult as APIAnalysisResult } from './api/analysisApi';
+import { ScrollArea } from './ui/scroll-area';
+import { getExampleById } from '@/components/api/exampleAnalyses';
+import { AnalysisResult, OpinionSource } from '@/components/api/analysisApi';
 import { ConflictDonutChart } from './ConflictDonutChart';
 import { KeywordWordCloud } from './KeywordWordCloud';
-
-interface AnalysisResult {
-  isValid: boolean;
-  keywords: string[];
-  supportOpinions: OpinionSource[];
-  opposeOpinions: OpinionSource[];
-  neutralOpinions: OpinionSource[];
-  alternativeOpinions: OpinionSource[];
-  futurePrediction: string;
-  originalContent?: {
-    title?: string;
-    summary: string;
-  };
-}
-
-interface OpinionSource {
-  title: string;
-  url: string;
-  source: string;
-  sourceType: 'news' | 'youtube' | 'blog';
-  snippet: string;
-}
 
 // 예시 목록
 const exampleList = [
   { id: 'aiEthicsKo', label: 'AI 윤리 규제 법안 (한국어)', language: 'ko' },
-  { id: 'evBatteryKo', label: '전기차 배터리 화재 안전 (한국어)', language: 'ko' },
   { id: 'climateChangeEn', label: 'Global Carbon Tax (English)', language: 'en' },
+  { id: 'evBatteryKo', label: '전기차 배터리 화재 안전 (한국어)', language: 'ko' },
   { id: 'remoteWorkKo', label: '원격근무 vs 사무실 복귀 (한국어)', language: 'ko' },
+  { id: 'medicalSchoolQuotaKo', label: '의대 정원 확대 (한국어)', language: 'ko' },
+  { id: 'dogMeatBanKo', label: '개 식용 금지법 (한국어)', language: 'ko' },
+  { id: 'aiCopyrightKo', label: '생성형 AI 저작권 분쟁 (한국어)', language: 'ko' },
+  { id: 'fourDayWeekKo', label: '주 4일제 도입 (한국어)', language: 'ko' },
+  { id: 'cryptoRegKo', label: '가상화폐 규제 (한국어)', language: 'ko' },
+  { id: 'ubiKo', label: '기본소득 도입 (한국어)', language: 'ko' },
+  { id: 'nuclearPowerKo', label: '원전 확대 vs 축소 (한국어)', language: 'ko' },
+  { id: 'spaceExplorationEn', label: 'Space Exploration Investment (English)', language: 'en' },
+  { id: 'noKidsZoneKo', label: '노키즈존 확산 논란 (한국어)', language: 'ko' },
+  { id: 'assistedDyingKo', label: '조력 존엄사 합법화 (한국어)', language: 'ko' },
+  { id: 'platformRegulationKo', label: '플랫폼 공정경쟁촉진법 (한국어)', language: 'ko' },
 ];
 
 export function IssueAnalysis() {
@@ -99,16 +89,7 @@ export function IssueAnalysis() {
     if (selectedExample) {
       const example = getExampleById(selectedExample);
       if (example) {
-        result = {
-          isValid: example.isValid,
-          keywords: example.keywords,
-          supportOpinions: example.supportOpinions,
-          opposeOpinions: example.opposeOpinions,
-          neutralOpinions: example.neutralOpinions,
-          alternativeOpinions: example.alternativeOpinions,
-          futurePrediction: example.futurePrediction,
-          originalContent: example.originalContent
-        };
+        result = example;
       } else {
         result = createDefaultMockResult();
       }
@@ -121,7 +102,13 @@ export function IssueAnalysis() {
   };
 
   const createDefaultMockResult = (): AnalysisResult => ({
+    analysisId: 'mock-default',
     isValid: true,
+    originalContent: {
+      title: 'AI 규제 논란',
+      summary: 'AI 기술 발전에 따른 규제 필요성과 혁신 저해 우려가 대립하고 있다.',
+      detectedLanguage: 'ko'
+    },
     keywords: ['AI', '인공지능', '규제', '윤리', '개인정보', '기술혁신'],
     supportOpinions: [
       {
@@ -180,7 +167,9 @@ export function IssueAnalysis() {
         snippet: '규제 샌드박스를 통해 혁신적인 AI 기술을 시험하고, 그 결과를 바탕으로 점진적으로 규제를 만들어가는 방식이 효과적일 수 있습니다.'
       }
     ],
-    futurePrediction: 'AI 규제에 대한 논의가 계속되면서, 향후 2-3년 내에 한국형 AI 규제 프레임워크가 마련될 것으로 예상됩니다. 이는 EU의 리스크 기반 접근법과 미국의 자율 규제 방식을 절충한 형태가 될 가능성이 높습니다. 특히 의료, 금융 등 고위험 분야에서는 강력한 규제가, 일반적인 AI 활용 분야에서는 가이드라인 중심의 접근이 이루어질 것으로 보입니다. 이러한 규제 체계는 AI 산업의 건전한 발전과 국민의 안전을 동시에 보장하는 방향으로 진화할 것입니다.'
+    futurePrediction: 'AI 규제에 대한 논의가 계속되면서, 향후 2-3년 내에 한국형 AI 규제 프레임워크가 마련될 것으로 예상됩니다. 이는 EU의 리스크 기반 접근법과 미국의 자율 규제 방식을 절충한 형태가 될 가능성이 높습니다. 특히 의료, 금융 등 고위험 분야에서는 강력한 규제가, 일반적인 AI 활용 분야에서는 가이드라인 중심의 접근이 이루어질 것으로 보입니다. 이러한 규제 체계는 AI 산업의 건전한 발전과 국민의 안전을 동시에 보장하는 방향으로 진화할 것입니다.',
+    confidence: 0.85,
+    analyzedAt: new Date().toISOString()
   });
 
   const getSourceIcon = (sourceType: 'news' | 'youtube' | 'blog') => {
@@ -380,6 +369,7 @@ export function IssueAnalysis() {
                     support={analysisResult.supportOpinions.length}
                     oppose={analysisResult.opposeOpinions.length}
                     neutral={analysisResult.neutralOpinions.length}
+                    alternative={analysisResult.alternativeOpinions.length}
                   />
                 </div>
               </CardContent>
@@ -427,11 +417,21 @@ export function IssueAnalysis() {
                 </p>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {analysisResult.supportOpinions.map((opinion, idx) => (
-                    <OpinionCard key={idx} opinion={opinion} stanceColor="bg-blue-100" />
-                  ))}
-                </div>
+                {analysisResult.supportOpinions.length >= 5 ? (
+                  <ScrollArea className="h-[500px] pr-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {analysisResult.supportOpinions.map((opinion, idx) => (
+                        <OpinionCard key={idx} opinion={opinion} stanceColor="bg-blue-100" />
+                      ))}
+                    </div>
+                  </ScrollArea>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {analysisResult.supportOpinions.map((opinion, idx) => (
+                      <OpinionCard key={idx} opinion={opinion} stanceColor="bg-blue-100" />
+                    ))}
+                  </div>
+                )}
               </CardContent>
             </Card>
           )}
@@ -446,11 +446,21 @@ export function IssueAnalysis() {
                 </p>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {analysisResult.opposeOpinions.map((opinion, idx) => (
-                    <OpinionCard key={idx} opinion={opinion} stanceColor="bg-red-100" />
-                  ))}
-                </div>
+                {analysisResult.opposeOpinions.length >= 5 ? (
+                  <ScrollArea className="h-[500px] pr-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {analysisResult.opposeOpinions.map((opinion, idx) => (
+                        <OpinionCard key={idx} opinion={opinion} stanceColor="bg-red-100" />
+                      ))}
+                    </div>
+                  </ScrollArea>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {analysisResult.opposeOpinions.map((opinion, idx) => (
+                      <OpinionCard key={idx} opinion={opinion} stanceColor="bg-red-100" />
+                    ))}
+                  </div>
+                )}
               </CardContent>
             </Card>
           )}
@@ -465,11 +475,21 @@ export function IssueAnalysis() {
                 </p>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {analysisResult.neutralOpinions.map((opinion, idx) => (
-                    <OpinionCard key={idx} opinion={opinion} stanceColor="bg-gray-100" />
-                  ))}
-                </div>
+                {analysisResult.neutralOpinions.length >= 5 ? (
+                  <ScrollArea className="h-[500px] pr-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {analysisResult.neutralOpinions.map((opinion, idx) => (
+                        <OpinionCard key={idx} opinion={opinion} stanceColor="bg-gray-100" />
+                      ))}
+                    </div>
+                  </ScrollArea>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {analysisResult.neutralOpinions.map((opinion, idx) => (
+                      <OpinionCard key={idx} opinion={opinion} stanceColor="bg-gray-100" />
+                    ))}
+                  </div>
+                )}
               </CardContent>
             </Card>
           )}
@@ -484,11 +504,21 @@ export function IssueAnalysis() {
                 </p>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {analysisResult.alternativeOpinions.map((opinion, idx) => (
-                    <OpinionCard key={idx} opinion={opinion} stanceColor="bg-green-100" />
-                  ))}
-                </div>
+                {analysisResult.alternativeOpinions.length >= 5 ? (
+                  <ScrollArea className="h-[500px] pr-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {analysisResult.alternativeOpinions.map((opinion, idx) => (
+                        <OpinionCard key={idx} opinion={opinion} stanceColor="bg-green-100" />
+                      ))}
+                    </div>
+                  </ScrollArea>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {analysisResult.alternativeOpinions.map((opinion, idx) => (
+                      <OpinionCard key={idx} opinion={opinion} stanceColor="bg-green-100" />
+                    ))}
+                  </div>
+                )}
               </CardContent>
             </Card>
           )}
